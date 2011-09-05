@@ -1,0 +1,42 @@
+@charset "utf-8";
+/* CSS Document */
+
+ul.jtree span {
+	color:black;
+	cursor:pointer;
+	display:inline-block;
+	min-height:20px;
+	padding-left:20px;
+	margin-left:10px;
+	background-position:0 0;
+	background-repeat:no-repeat;
+}
+
+ul.jtree ul li {
+	background-repeat : no-repeat;
+	background-position : 0 8px, 0 0;
+	background-size : 8px 1px, 1px 100%;
+	background-image : url(img/icons/dot.png), url(img/icons/dot.png);
+	padding:0;margin:0;
+	line-height:20px;
+}
+
+ul.jtree ul li:last-child { background-size : 8px 1px, 1px 8px; }
+
+ul.jtree span[data-state=open] { background-image:url(img/icons/folder_open.png); }
+ul.jtree span:not([data-state=open]) { background-image:url(img/icons/folder.png); }
+
+ul.jtree span:hover {
+	color:blue;
+	background-color:rgba(0,0,255,0.1);
+}
+
+ul.jtree {
+	list-style:none;
+	font:1.2em;
+	background-color:#ffffff;
+	border-radius:10px;
+}
+
+ul.jtree span:not([data-style="unclosable"]) + ul { display:none; }
+ul.jtree span + ul { list-style:none; font-size:95%; margin-left:18px; }
