@@ -193,7 +193,7 @@
 		{	var d = $('<li><span>'+name+endhtml).jtree(opt);
 			var filename = name;
 		} else { var d=name; var filename = d.children("span").text(); }
-		d.hide();//css("display","none");
+		d.hide();
 		if(list.length)
 		{	list.each(function()
 			{	var $t = $(this); if($t.text() > filename){ out = d.insertBefore($t.parent()); return false; }
@@ -217,7 +217,6 @@
 
 	$.fn.jtreeSelect = function(path)
 	{	var t = $(this);
-	//alert(path);
 		//t.css("color","blue");
 		if(t.is("ul.jtree"))
 		{	var root = t.children();
@@ -225,11 +224,12 @@
 		root = root.children("span").next();
 		var p = path.split('/'); p = $.grep(p,function(n){ return(n); });
 		var nb = p.length;
-		for(var n=0;n<nb-1;n++)
-		{	var child = root.children('li').children('span+ul').prev("span:contains("+p[n]+")").last();
+		var start = 0; if(p[0] == "root") start=1;
+		for(var n=start;n<nb-1;n++)
+		{	var child = root.children('li').children('span+ul').prev("span:jtreeNameIs("+p[n]+")").last();
 			if(child.length) root = child.next(); else return root.prev();
 		}
-		child = root.children('li').children('span:contains('+p[nb-1]+')').last();
+		child = root.children('li').children('span:jtreeNameIs('+p[nb-1]+')').last();
 		if(child.length) return child;
 		return root.prev();
 	}
@@ -240,27 +240,10 @@
 	{	var t = $(this);
 		var opt = $.extend({}, $.fn.jtree.dopt, options);
 		var ul = t.next("ul").add(t.parentsUntil('ul.jtree','ul'));
-		
-		//var z = t.parentsUntil('ul.jtree','ul');
-/*		alert("one :");
-		z.each(function(i)
-		{	var tz = $(this); alert(tz.prev().text());
-		});
-		alert("two :");
-		ul.each(function(i)
-		{	var tz = $(this); alert(tz.prev().text());
-		});*/
-		
-		//var ul = t.parentsUntil('ul.jtree').filter("ul").add(t.next("ul"));
 		ul = ul.prev().filter(":jtreeClose").next(); if(!ul.length) ul=t.next("ul");
-	
-/*		ul.each(function(i)
-		{	var tz = $(this); alert(tz.prev().text());
-		});*/
-	
-		
+
 		ul.each(function(i)
-		{	var t = $(this);// alert(t.prev().text());
+		{	var t = $(this);
 			openfolder(t.prev(),t.delay(opt.multiOpenDelay*i),opt);
 		});
 
@@ -269,9 +252,6 @@
 
 	$.fn.jtreeGoTo = function(path,options)
 	{	return $(this).jtreeSelect(path).jtreeOpenTo(options);
-/*		var s = $(this).jtreeSelect(path);
-		s.css("color","red");
-		s.jtreeOpenTo(options);*/
 	}
 
 	$.fn.jtreeSearchFile = function(name,mode)
